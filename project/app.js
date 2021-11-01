@@ -11,17 +11,24 @@ async function main() {
     const client = new MongoClient(url);
     await client.connect();
 
-    const results = await circulationRepo.loadData(data);
-    console.log(results.insertedCount, results.ops);
+    try {
+        const results = await circulationRepo.loadData(data);
+        assert.equal(data.length, results.insertedCount);
 
-    const getData = await circulationRepo.get();
-    assert.equal(data.length, getData.length);
+        // console.log(results.insertedCount, results.ops);
 
+        const getData = await circulationRepo.get();
+        assert.equal(data.length, getData.length);
 
-    const admin = client.db(dbName).admin();
-    // console.log(await admin.serverStatus());
-    console.log(await admin.listDatabases());
-    client.close();
+    } catch (error) {
+        console.log(error);
+
+    } finally {
+        const admin = client.db(dbName).admin();
+        // console.log(await admin.serverStatus());
+        console.log(await admin.listDatabases());
+        client.close();
+    }
 }
 
 main();
