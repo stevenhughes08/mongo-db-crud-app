@@ -4,6 +4,23 @@ function circulationRepo() {
     const url = 'mongodb://localhost:27017';
     const dbName = 'circulation';
 
+    function get() {
+        return new Promise(async(resolve, reject) => {
+            const client = new MongoClient(url);
+            try {
+                await client.connect();
+                const db = client.db(dbName);
+
+                const items = db.collection('newspapers').find(); //Find returns only a cursor: 
+                resolve(await items.toArray());
+                client.close();
+            } catch (error) {
+                reject(error);
+            }
+
+        });
+    }
+
     function loadData(data) {
         return new Promise(async(resolve, reject) => {
             const client = new MongoClient(url);
@@ -19,7 +36,7 @@ function circulationRepo() {
         })
     }
 
-    return { loadData }
+    return { loadData, get }
 }
 
 module.exports = circulationRepo();
