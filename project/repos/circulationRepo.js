@@ -1,5 +1,6 @@
 const { MongoClient } = require('mongodb');
 
+// This is called the revealing module pattern
 function circulationRepo() {
     const url = 'mongodb://localhost:27017';
     const dbName = 'circulation';
@@ -13,6 +14,7 @@ function circulationRepo() {
 
                 results = await db.collection('newspapers').insertMany(data);
                 resolve(results);
+                // client.close();
             } catch (error) {
                 reject(error)
             }
