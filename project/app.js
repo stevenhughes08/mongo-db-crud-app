@@ -31,6 +31,24 @@ async function main() {
         assert.deepEqual(byId, getData[4]);
 
 
+        const newItem = {
+            "Newspaper": "Louisville Courior Journal",
+            "Daily Circulation, 2004": 827352,
+            "Daily Circulation, 2013": 652152,
+            "Change in Daily Circulation, 2004-2013": -43,
+            "Pulitzer Prize Winners and Finalists, 1990-2003": 11,
+            "Pulitzer Prize Winners and Finalists, 2004-2014": 3,
+            "Pulitzer Prize Winners and Finalists, 1990-2014": 13
+        }
+
+        const addedItem = await circulationRepo.add(newItem);
+        assert(addedItem._id);
+        const addedItemQuery = await circulationRepo.getById(addedItem._id);
+        assert.deepEqual(addedItemQuery, newItem);
+
+
+
+
     } catch (error) {
         console.log(error);
 
